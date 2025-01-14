@@ -41,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6878937058071894514}
-  - component: {fileID: 4895456771539708707}
+  - component: {fileID: 6788863015270037709}
   m_Layer: 0
   m_Name: ChunkPrefab
   m_TagString: Untagged
@@ -68,7 +68,7 @@ Transform:
   - {fileID: 7964580915099713228}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4895456771539708707
+--- !u!114 &6788863015270037709
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -80,11 +80,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48ae58f7265d0014b85bc600bba1a920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FencePrefab: {fileID: 4683316304235411016, guid: 495ef02dcd2f88c4eb4690bfc3e77b31, type: 3}
+  coinSpawnChance: 0.5
+  cakeSpawnChance: 0.5
+  coinSeperationLenght: 2
   lanes:
-  - -4.5
+  - -4
   - -0.5
-  - 3
+  - 2.75
 --- !u!1 &8945566744410320417
 GameObject:
   m_ObjectHideFlags: 0

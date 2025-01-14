@@ -9,26 +9,40 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] float moveSpeed = 8f; // chunkların hareket hızı
     
     List <GameObject> activeChunks = new List<GameObject>(); // chunkları tutacak liste
+    private Coroutine generateRoutine; // coroutine tanımlama
 
+      public void StartGenerating() 
+    {
+        generateRoutine = StartCoroutine(GenerateLevel()); 
+    }
 
+    public void StopGenerating()
+    {
+        if (generateRoutine != null)
+        {
+            StopCoroutine(generateRoutine);
+        }
+    }
 
-    void Start()
+    private IEnumerator GenerateLevel() // chunkları oluştur
     {
         for (int i = 0; i < 12; i++) // 12 tane chunk oluşturuyorum
         {
             SpawnChunks();
         }
-        
-    }
-    void Update()
-    {
-        MoveChunks();
+
+        while (true)
+        {
+            MoveChunks();
+            yield return null;
+        }
     }
 
     void SpawnChunks()
     {      
         GameObject newChunk = chunkPool.GetChunk(); // object pool'dan chunk al
         newChunk.transform.position = new Vector3(0, 0, SpawnPosZCalculator()); // chunkın pozisyonunu belirle
+        newChunk.SetActive(true); // chunkı aktif et
         activeChunks.Add(newChunk); // chunkı listeye ekle
     }
     float SpawnPosZCalculator() // chunkların pozisyonunu belirle
