@@ -4,18 +4,20 @@ using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
 {
-    [SerializeField] GameObject chunkPrefab; // chunk prefabı
-    [SerializeField] int startingChunkAmount = 12; // baştaki chunk sayısı
-    [SerializeField] Transform chunkParent; // chunkların parentı
+    [SerializeField] ObjectPool chunkPool; // chunkları tutacak object pool
     [SerializeField] float chunkLength = 10f; // chunk uzunluğu
     [SerializeField] float moveSpeed = 8f; // chunkların hareket hızı
-    List <GameObject> chunks = new List<GameObject>(); // chunkları tutacak dizi
+    
+    List <GameObject> activeChunks = new List<GameObject>(); // chunkları tutacak liste
 
 
 
     void Start()
     {
-        SpawnStartingChunks();
+        for (int i = 0; i < 12; i++) // 12 tane chunk oluşturuyorum
+        {
+            SpawnChunks();
+        }
         
     }
     void Update()
@@ -23,32 +25,22 @@ public class LevelGenerator : MonoBehaviour
         MoveChunks();
     }
 
-
-    void SpawnStartingChunks()
-    {
-       for (int i = 0; i < startingChunkAmount; i++) // başlangıçta belirtilen sayıda chunk oluştur
-        {
-            SpawnChunks();
-
-        }
-    }
     void SpawnChunks()
     {      
-        float spawnPosZ = SpawnPosZCalculator(); 
-        Vector3 spawnPos = new Vector3(transform.position.x, transform.position.y, spawnPosZ); // chunkın pozisyonunu belirle
-        GameObject newChunk = Instantiate(chunkPrefab, spawnPos, Quaternion.identity, chunkParent); // chunkı oluştur
-        chunks.Add(newChunk); // chunkı listeye ekle
+        GameObject newChunk = chunkPool.GetChunk(); // object pool'dan chunk al
+        newChunk.transform.position = new Vector3(0, 0, SpawnPosZCalculator()); // chunkın pozisyonunu belirle
+        activeChunks.Add(newChunk); // chunkı listeye ekle
     }
     float SpawnPosZCalculator() // chunkların pozisyonunu belirle
     {
         float spawnPosZ;
-            if (chunks.Count == 0) // eğer hiç chunk yoksa
+            if (activeChunks.Count == 0) // eğer hiç chunk yoksa
             {
                 spawnPosZ = transform.position.z;
             }
-            else // diğer chunkların pozisyonunu belirle
+            else 
             {
-                spawnPosZ = chunks[chunks.Count - 1].transform.position.z + chunkLength;
+                spawnPosZ = activeChunks[activeChunks.Count - 1].transform.position.z + chunkLength; // eğer ki chunk varsa en son oluşturulan chunkın pozisyonunu al ve chunk uzunluğunu ekle
             }
 
         return spawnPosZ; 
@@ -56,16 +48,16 @@ public class LevelGenerator : MonoBehaviour
 
     void MoveChunks() // chunkları hareket ettir
     {
-        for (int i = 0; i < chunks.Count; i++)
+        for (int i = 0; i < activeChunks.Count; i++)
         {
-            GameObject chunk = chunks[i];
+            GameObject chunk = activeChunks[i];
             chunk.transform.Translate(-transform.forward * moveSpeed * Time.deltaTime); // chunkları ileri doğru hareket ettir
 
             if(chunk.transform.position.z <= Camera.main.transform.position.z - chunkLength) // chunkın pozisyonu belirli bir değerin altına düşerse
             {  
 
-                chunks.RemoveAt(i); // chunkı listeden çıkar
-                Destroy(chunk); // chunkı yok et
+                activeChunks.RemoveAt(i); // chunkı listeden çıkar
+                chunkPool.ReturnObject(chunk); // chunkı object pool'a geri döndür
                 SpawnChunks(); // yeni bir chunk oluştur
                 i--; // chunklar listeden çıkarıldığı için indexi bir azalt
             }
