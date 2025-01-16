@@ -9,11 +9,11 @@ public class GameManager : MonoBehaviour
     public ObstacleSpawner obstacleSpawner; // ObstacleSpawner scriptini tutacak
     public ChunkPool chunkPool; // ChunkPool scriptini tutacak
     
-    private void Awake()
+    private void Awake() // Singleton pattern ekledim
      {
         if (Instance == null) 
         {
-            Instance = this;
+            Instance = this; 
         } else 
         {
             Destroy(gameObject);
@@ -27,8 +27,8 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-       levelGenerator.StartGenerating(); // LevelGenerator scriptini aktif et
-         obstacleSpawner.StartSpawning(); // ObstacleSpawner scriptini aktif et
+        levelGenerator.StartGenerating(); // LevelGenerator scriptini aktif et
+        obstacleSpawner.StartSpawning(); // ObstacleSpawner scriptini aktif et
     }
 
     public void EndGame()

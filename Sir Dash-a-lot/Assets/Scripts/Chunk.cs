@@ -68,7 +68,7 @@ public class Chunk : MonoBehaviour
             float spawnPositionZ = topOfChunkPosZ - (coinSeperationLenght * i); // Coin'lerin arkasında olacak şekilde pozisyon belirleme
             Vector3 spawnPosition = new Vector3(lanes[selectedLane], transform.position.y, spawnPositionZ); // Rastgele bir konum belirleme
             GameObject coin = GameManager.Instance.chunkPool.GetCoin(); // Havuzdan coin al
-            coin.transform.position = spawnPosition;
+            coin.transform.position = spawnPosition; 
             coin.transform.parent = transform; // Coin'i chunk'ın child'ı yap
             coin.SetActive(true);
         }

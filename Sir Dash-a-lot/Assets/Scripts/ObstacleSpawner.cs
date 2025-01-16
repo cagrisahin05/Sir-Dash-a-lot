@@ -6,6 +6,9 @@ public class ObstacleSpawner : MonoBehaviour
 {
     [SerializeField]  public ObstaclePool obstaclePool; // ObstaclePool scriptini çağırma
     [SerializeField] float obstacleSpawnTime = 2f;
+    private GameObject tempoGameObject;
+    private float currentTime = 0f;
+    private bool isSpawning = false;
     [SerializeField] float spawnWidth = 4f;
 
     List<GameObject> activeObstacles= new List<GameObject>(); // chunkları tutacak liste
@@ -20,18 +23,45 @@ public class ObstacleSpawner : MonoBehaviour
     }
        public void StartSpawning()
     {
-        spawnRoutine = StartCoroutine(SpawnObstacleRoutine()); // Engelleri oluşturmak için coroutine çağırma
-        InvokeRepeating("ObstacleHandler", 0f, 1f); // ObstacleHandler'ı düzenli olarak çağır
+        isSpawning = true;
+        // spawnRoutine = StartCoroutine(SpawnObstacleRoutine()); // Engelleri oluşturmak için coroutine çağırma
+         InvokeRepeating("ObstacleHandler", 0f, 1f); // ObstacleHandler'ı düzenli olarak çağır
     }
-
     public void StopSpawning()
     {
-        if (spawnRoutine != null)
-        {
-            StopCoroutine(spawnRoutine);
-        }
-        CancelInvoke("ObstacleHandler");
+        isSpawning = false;
+        // StopCoroutine(spawnRoutine); // Coroutine'u durdur
+        CancelInvoke("ObstacleHandler"); // ObstacleHandler'ı durdur
     }
+
+    void SpawnObstacle()
+    {
+        tempoGameObject = GetRandomObstacle(); // ObstaclePool'dan engel al
+            if (tempoGameObject != null)
+            {
+                Vector3 spawnPosition = new Vector3(Random.Range(-spawnWidth, spawnWidth), transform.position.y, transform.position.z); // Rastgele bir konum belirleme
+                Quaternion randomRotation = Quaternion.Euler(0, Random.Range(0, 360), 0); // Rastgele bir rotasyon belirleme
+                tempoGameObject.transform.rotation = randomRotation; // Engelin rotasyonunu ayarlama
+                tempoGameObject.transform.position = spawnPosition;
+                tempoGameObject.SetActive(true);
+                activeObstacles.Add(tempoGameObject); // Aktif engeller listesine ekle
+                lastObstacle = tempoGameObject; // Son engeli güncelle   
+            }
+    }
+    private void Update() 
+    {
+        if (!isSpawning) return;
+        
+        currentTime += Time.deltaTime;
+        if (currentTime >= obstacleSpawnTime)
+        {
+            SpawnObstacle();
+            currentTime = 0f;
+        }
+
+    }
+
+    
    
     
     IEnumerator SpawnObstacleRoutine()
@@ -55,27 +85,27 @@ public class ObstacleSpawner : MonoBehaviour
     }
     GameObject GetRandomObstacle()
     {
-        GameObject obstaclePrefab;
+        
         int deneme = 0;
         do
         {
-            obstaclePrefab = obstaclePool.GetObstacle(); // ObstaclePool'dan engel al
+            tempoGameObject = obstaclePool.GetObstacle(); // ObstaclePool'dan engel al
             deneme++; // Deneme sayısını arttır
-        } while (obstaclePrefab == lastObstacle && deneme < 10);
+        } while (tempoGameObject == lastObstacle && deneme < 10);
 
-        return obstaclePrefab;
+        return tempoGameObject;
     }
 
     void ObstacleHandler()
     {
          for (int i = 0; i < activeObstacles.Count; i++)
         {
-            GameObject obstacle = activeObstacles[i];
-            if (obstacle.transform.position.z <= Camera.main.transform.position.z) // chunkın pozisyonu belirli bir değerin altına düşerse
+            tempoGameObject = activeObstacles[i];
+            if (tempoGameObject.transform.position.z <= Camera.main.transform.position.z) // chunkın pozisyonu belirli bir değerin altına düşerse
             {
-                Debug.Log("Returning obstacle: " + obstacle.name);
+                Debug.Log("Returning obstacle: " + tempoGameObject.name);
                 activeObstacles.RemoveAt(i);
-                obstaclePool.ReturnObstacle(obstacle);
+                obstaclePool.ReturnObstacle(tempoGameObject);
                 i--;
             }
         }
