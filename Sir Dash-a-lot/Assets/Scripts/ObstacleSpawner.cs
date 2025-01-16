@@ -15,11 +15,17 @@ public class ObstacleSpawner : MonoBehaviour
     private Coroutine spawnRoutine; // coroutine tanımlama
     private GameObject lastObstacle; // Son engeli tutacak değişken
 
-    
-
-    void Start()
+    private void Update() 
     {
-       
+        if (!isSpawning) return;
+        
+        currentTime += Time.deltaTime;
+        if (currentTime >= obstacleSpawnTime)
+        {
+            SpawnObstacle();
+            currentTime = 0f;
+        }
+
     }
        public void StartSpawning()
     {
@@ -48,21 +54,6 @@ public class ObstacleSpawner : MonoBehaviour
                 lastObstacle = tempoGameObject; // Son engeli güncelle   
             }
     }
-    private void Update() 
-    {
-        if (!isSpawning) return;
-        
-        currentTime += Time.deltaTime;
-        if (currentTime >= obstacleSpawnTime)
-        {
-            SpawnObstacle();
-            currentTime = 0f;
-        }
-
-    }
-
-    
-   
     
     IEnumerator SpawnObstacleRoutine()
     {

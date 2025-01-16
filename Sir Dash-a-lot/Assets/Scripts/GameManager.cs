@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; } // Singleton pattern ekledim
-    public LevelGenerator levelGenerator; // LevelGenerator scriptini tutacak
-    public ObstacleSpawner obstacleSpawner; // ObstacleSpawner scriptini tutacak
     public ChunkPool chunkPool; // ChunkPool scriptini tutacak
+    public UnityEvent OnGameStart; // Oyun başladığında çağrılacak event
+    public UnityEvent OnGameEnd;
+    public GameState gameState = GameState.AnaMenu; // Oyunun durumunu tutacak
     
     private void Awake() // Singleton pattern ekledim
      {
@@ -27,14 +29,15 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        levelGenerator.StartGenerating(); // LevelGenerator scriptini aktif et
-        obstacleSpawner.StartSpawning(); // ObstacleSpawner scriptini aktif et
+        //levelGenerator.StartGenerating(); // LevelGenerator scriptini aktif et
+        OnGameStart.Invoke(); // Oyun başladığında çağrıl
+        
     }
 
     public void EndGame()
     {
-        levelGenerator.StopGenerating(); // LevelGenerator scriptini durdur
-        obstacleSpawner.StopSpawning(); // ObstacleSpawner scriptini durdur
+        //levelGenerator.StopGenerating(); // LevelGenerator scriptini durdur
+        OnGameEnd.Invoke();
     }
      public void RestartGame()
     {
@@ -44,4 +47,12 @@ public class GameManager : MonoBehaviour
     }
 
 
+}
+
+public enum GameState
+{
+    AnaMenu,
+    Oyun,
+    Duraklama,
+    OyunBitti
 }

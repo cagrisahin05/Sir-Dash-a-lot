@@ -10,6 +10,7 @@ public class ChunkPool : MonoBehaviour
     [SerializeField] GameObject coinPrefab; // coin prefabı
     [SerializeField] GameObject cakePrefab; // cake prefabı
     [SerializeField] GameObject fencePrefab; // fence prefabı
+    GameObject tempoPickUpObject; // tempo cache için gameobject tanımlama
 
     private List<GameObject> coinPool; // coinleri tutacak liste
     private List<GameObject> cakePool; // cakeleri tutacak liste
@@ -23,17 +24,17 @@ public class ChunkPool : MonoBehaviour
 
         for (int i = 0; i < poolSize; i++)
         {
-            GameObject coin = Instantiate(coinPrefab, chunkParent);
-            coin.SetActive(false);
-            coinPool.Add(coin);
+            tempoPickUpObject = Instantiate(coinPrefab, chunkParent);
+            tempoPickUpObject.SetActive(false);
+            coinPool.Add(tempoPickUpObject);
 
-            GameObject cake = Instantiate(cakePrefab, chunkParent);
-            cake.SetActive(false);
-            cakePool.Add(cake);
+            tempoPickUpObject = Instantiate(cakePrefab, chunkParent);
+            tempoPickUpObject.SetActive(false);
+            cakePool.Add(tempoPickUpObject);
 
-            GameObject fence = Instantiate(fencePrefab, chunkParent);
-            fence.SetActive(false);
-            fencePool.Add(fence);
+            tempoPickUpObject = Instantiate(fencePrefab, chunkParent);
+            tempoPickUpObject.SetActive(false);
+            fencePool.Add(tempoPickUpObject);
         }
     }
 
@@ -43,16 +44,17 @@ public class ChunkPool : MonoBehaviour
         {
             if (!coin.activeInHierarchy)
             {
-                coin.SetActive(true);
-                return coin;
+                this.tempoPickUpObject = coin;
+                this.tempoPickUpObject.SetActive(true);
+                return this.tempoPickUpObject;
             }
         }
 
         // Eğer havuzda aktif olmayan coin kalmadıysa yeni bir coin oluştur
-        GameObject newCoin = Instantiate(coinPrefab, chunkParent);
-        newCoin.SetActive(false);
-        coinPool.Add(newCoin);
-        return newCoin;
+        tempoPickUpObject = Instantiate(coinPrefab, chunkParent);
+        tempoPickUpObject.SetActive(false);
+        coinPool.Add(tempoPickUpObject);
+        return tempoPickUpObject;
     }
 
     public GameObject GetCake()
@@ -60,17 +62,18 @@ public class ChunkPool : MonoBehaviour
         foreach (GameObject cake in cakePool)
         {
             if (!cake.activeInHierarchy)
-            {
-                cake.SetActive(true);
-                return cake;
+            {   
+                this.tempoPickUpObject = cake;
+                this.tempoPickUpObject.SetActive(true);
+                return this.tempoPickUpObject;
             }
         }
 
         // Eğer havuzda aktif olmayan cake kalmadıysa yeni bir cake oluştur
-        GameObject newCake = Instantiate(cakePrefab, chunkParent);
-        newCake.SetActive(false);
-        cakePool.Add(newCake);
-        return newCake;
+        tempoPickUpObject = Instantiate(cakePrefab, chunkParent);
+        tempoPickUpObject.SetActive(false);
+        cakePool.Add(tempoPickUpObject);
+        return tempoPickUpObject;
     }
 
     public GameObject GetFence()
@@ -79,30 +82,23 @@ public class ChunkPool : MonoBehaviour
         {
             if (!fence.activeInHierarchy)
             {
-                fence.SetActive(true);
-                return fence;
+                tempoPickUpObject = fence;
+                tempoPickUpObject.SetActive(true);
+                return tempoPickUpObject;
             }
         }
 
         // Eğer havuzda aktif olmayan fence kalmadıysa yeni bir fence oluştur
-        GameObject newFence = Instantiate(fencePrefab, chunkParent);
-        newFence.SetActive(false);
-        fencePool.Add(newFence);
-        return newFence;
+        tempoPickUpObject = Instantiate(fencePrefab, chunkParent);
+        tempoPickUpObject.SetActive(false);
+        fencePool.Add(tempoPickUpObject);
+        return tempoPickUpObject;
     }
 
-    public void ReturnCoin(GameObject coin)
+    public void ReturnObject(GameObject obj)
     {
-        coin.SetActive(false);
+        obj.SetActive(false);
     }
 
-    public void ReturnCake(GameObject cake)
-    {
-        cake.SetActive(false);
-    }
-
-    public void ReturnFence(GameObject fence)
-    {
-        fence.SetActive(false);
-    }
+   
 }
