@@ -7,11 +7,14 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] ObjectPool chunkPool; // chunkları tutacak object pool
     [SerializeField] float chunkLength = 10f; // chunk uzunluğu
     [SerializeField] float moveSpeed = 8f; // chunkların hareket hızı
+    [SerializeField] float minMoveSpeed = 2f;
     GameObject tempoLevelObject; // tempo cache için gameobject tanımlama
     private float currentTime = 0f;
     private bool isGenerating = false;
     List <GameObject> activeChunks = new List<GameObject>(); // chunkları tutacak liste
     private Coroutine generateRoutine; // coroutine tanımlama
+
+    // chunkların hareket hızını değiştirmek için kullanılacak değişken
 
     private void Update() 
     {
@@ -25,6 +28,13 @@ public class LevelGenerator : MonoBehaviour
         }
 
         MoveChunks();
+    }
+
+    public void ChangeChunkMoveSpeed(float speedAmount) // chunkların hareket hızını değiştir
+
+    {
+        moveSpeed += speedAmount;
+        if (moveSpeed < minMoveSpeed) moveSpeed = minMoveSpeed;
     }
 
     
@@ -49,6 +59,7 @@ public class LevelGenerator : MonoBehaviour
         tempoLevelObject.transform.position = new Vector3(0, 0, SpawnPosZCalculator()); // chunkın pozisyonunu belirle
         tempoLevelObject.SetActive(true); // chunkı aktif et
         activeChunks.Add(tempoLevelObject); // chunkı listeye ekle
+        
     }
     float SpawnPosZCalculator() // chunkların pozisyonunu belirle
     {

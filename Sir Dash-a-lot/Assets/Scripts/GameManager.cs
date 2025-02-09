@@ -6,22 +6,29 @@ using UnityEngine.Events;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; } // Singleton pattern ekledim
-    public ChunkPool chunkPool; // ChunkPool scriptini tutacak
     public UnityEvent OnGameStart; // Oyun başladığında çağrılacak event
     public UnityEvent OnGameEnd;
-    public GameState gameState = GameState.AnaMenu; // Oyunun durumunu tutacak
+    public GameState currentState; // Oyun durumu
     
-    private void Awake() // Singleton pattern ekledim
-     {
-        if (Instance == null) 
-        {
-            Instance = this; 
-        } else 
-        {
-            Destroy(gameObject);
-        }
+    public enum GameState
+    {
+        AnaMenu,
+        Oyun,
+        Duraklama,
+        OyunBitti
     }
-
+    private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+    }
     private void Start()
     {
         StartGame();
@@ -29,14 +36,16 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        //levelGenerator.StartGenerating(); // LevelGenerator scriptini aktif et
+        SetGameState(GameState.Oyun); // Oyun durumunu başlat
+        
         OnGameStart.Invoke(); // Oyun başladığında çağrıl
         
     }
 
     public void EndGame()
     {
-        //levelGenerator.StopGenerating(); // LevelGenerator scriptini durdur
+        SetGameState(GameState.OyunBitti); // Oyun durumunu bitir
+        
         OnGameEnd.Invoke();
     }
      public void RestartGame()
@@ -45,14 +54,13 @@ public class GameManager : MonoBehaviour
         EndGame();
         StartGame();
     }
+    private void SetGameState(GameState newState) 
+    {
+        currentState = newState;
+        // Oyun durumu değiştiğinde yapılacak işlemler
+        Debug.Log("Game State changed to: " + currentState);
+    }
 
 
 }
 
-public enum GameState
-{
-    AnaMenu,
-    Oyun,
-    Duraklama,
-    OyunBitti
-}

@@ -31,7 +31,7 @@ public class Chunk : MonoBehaviour
             }
             int selectedLane = SelectLane(); // Lane seçme
             Vector3 spawnPosition = new Vector3(lanes[selectedLane], transform.position.y, transform.position.z); // Rastgele bir konum belirleme
-            tempoChunkObject = GameManager.Instance.chunkPool.GetFence(); // Havuzdan fence al
+            tempoChunkObject = ChunkPool.Instance.GetFence(); // Havuzdan fence al
             tempoChunkObject.transform.position = spawnPosition;
             tempoChunkObject.transform.parent = transform; // Fence'i chunk'ın child'ı yap
             tempoChunkObject.SetActive(true);
@@ -47,7 +47,7 @@ public class Chunk : MonoBehaviour
         int selectedLane = SelectLane(); // Lane seçme
 
         Vector3 spawnPosition = new Vector3(lanes[selectedLane], transform.position.y, transform.position.z); // Rastgele bir konum belirleme
-        tempoChunkObject = GameManager.Instance.chunkPool.GetCake(); // Havuzdan cake al
+        tempoChunkObject = ChunkPool.Instance.GetCake(); // Havuzdan cake al
         tempoChunkObject.transform.position = spawnPosition;
         tempoChunkObject.transform.parent = transform; // Cake'i chunk'ın child'ı yap
         tempoChunkObject.SetActive(true);
@@ -68,7 +68,7 @@ public class Chunk : MonoBehaviour
         {
             float spawnPositionZ = topOfChunkPosZ - (coinSeperationLenght * i); // Coin'lerin arkasında olacak şekilde pozisyon belirleme
             Vector3 spawnPosition = new Vector3(lanes[selectedLane], transform.position.y, spawnPositionZ); // Rastgele bir konum belirleme
-            tempoChunkObject = GameManager.Instance.chunkPool.GetCoin(); // Havuzdan coin al
+            tempoChunkObject = ChunkPool.Instance.GetCoin(); // Havuzdan coin al
             tempoChunkObject.transform.position = spawnPosition; 
             tempoChunkObject.transform.parent = transform; // Coin'i chunk'ın child'ı yap
             tempoChunkObject.SetActive(true);

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4919272492863188214}
   m_Layer: 0
   m_Name: Pot
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -125,6 +125,10 @@ PrefabInstance:
     - target: {fileID: 165666, guid: 6cecb8f8cf3206345b6b535cbc70d1eb, type: 3}
       propertyPath: m_Name
       value: CookingPot
+      objectReference: {fileID: 0}
+    - target: {fileID: 165666, guid: 6cecb8f8cf3206345b6b535cbc70d1eb, type: 3}
+      propertyPath: m_TagString
+      value: Obstacle
       objectReference: {fileID: 0}
     - target: {fileID: 436648, guid: 6cecb8f8cf3206345b6b535cbc70d1eb, type: 3}
       propertyPath: m_LocalPosition.x

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7578201329733842883}
   m_Layer: 0
   m_Name: Wagon
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -147,6 +147,10 @@ PrefabInstance:
     - target: {fileID: 180680, guid: 562808a9cf61c1f41a475378c1fd3f97, type: 3}
       propertyPath: m_Name
       value: Wagon
+      objectReference: {fileID: 0}
+    - target: {fileID: 180680, guid: 562808a9cf61c1f41a475378c1fd3f97, type: 3}
+      propertyPath: m_TagString
+      value: Obstacle
       objectReference: {fileID: 0}
     - target: {fileID: 493744, guid: 562808a9cf61c1f41a475378c1fd3f97, type: 3}
       propertyPath: m_LocalPosition.x

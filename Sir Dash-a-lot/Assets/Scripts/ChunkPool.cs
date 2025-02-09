@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ChunkPool : MonoBehaviour
 {
+    public static ChunkPool Instance { get; private set; } // Singleton pattern ekledim
     [SerializeField] Transform chunkParent; // chunkların parentı
     [SerializeField] int poolSize = 10; // havuzdaki nesne sayısı
     [SerializeField] GameObject coinPrefab; // coin prefabı
@@ -18,6 +19,18 @@ public class ChunkPool : MonoBehaviour
 
     private void Awake()
     {
+         if (Instance == null)
+        {
+            Instance = this;
+            transform.parent = null;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+    
         coinPool = new List<GameObject>(poolSize);
         cakePool = new List<GameObject>(poolSize);
         fencePool = new List<GameObject>(poolSize);
@@ -40,7 +53,7 @@ public class ChunkPool : MonoBehaviour
 
     public GameObject GetCoin()
     {
-        foreach (GameObject coin in coinPool)
+        foreach (var coin in coinPool)
         {
             if (!coin.activeInHierarchy)
             {
